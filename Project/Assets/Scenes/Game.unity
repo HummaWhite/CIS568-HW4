@@ -1368,7 +1368,7 @@ MonoBehaviour:
   m_TrackingStateInput:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Tracking State Input
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: f338b69e-1c9c-4147-aebb-8f0d9c00e6b5
@@ -1534,6 +1534,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 5786375879518019165, guid: 133f41d7c73924e42a428ccaa1975ea6,
     type: 3}
   initialSpeed: 8
+  projectBehavior: {fileID: 30883332838614829, guid: 133f41d7c73924e42a428ccaa1975ea6,
+    type: 3}
 --- !u!1 &835797453
 GameObject:
   m_ObjectHideFlags: 0

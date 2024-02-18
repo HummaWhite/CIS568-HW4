@@ -15,6 +15,8 @@
         [SerializeField]
         private float initialSpeed = 25;
 
+        public ProjectileBehaviour projectBehavior;
+
         protected override void OnPressBegan(Vector3 position)
         {
             if (this.projectilePrefab == null || !NetworkLauncher.Singleton.HasJoinedRoom)
@@ -31,6 +33,7 @@
             // Cast a ray from the touch point to the world. We use the camera position as the origin and the ray direction as the
             // velocity direction.
             var ray = this.GetComponent<Camera>().ScreenPointToRay(position);
+
             var projectile = PhotonNetwork.Instantiate(this.projectilePrefab.name, ray.origin, Quaternion.identity, data: initialData);
 
             // By default, the projectile is kinematic in the prefab. This is because it should not be affected by physics
