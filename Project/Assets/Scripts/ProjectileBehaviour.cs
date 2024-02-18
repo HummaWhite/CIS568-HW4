@@ -11,6 +11,8 @@ namespace MyFirstARGame
         [SerializeField]
         private Material[] projectileMaterials;
 
+        public int playerNumber = 0;
+
         private void Awake()
         {
             // Pick a material based on our player number so that we can distinguish between projectiles. We use the player number
@@ -18,11 +20,28 @@ namespace MyFirstARGame
             // See ProjectileLauncher.cs for more details.
             var photonView = this.transform.GetComponent<PhotonView>();
             var playerId = Mathf.Max((int)photonView.InstantiationData[0], 0);
+            playerNumber = (int)playerId;
             if (this.projectileMaterials.Length > 0)
             {
                 var material = this.projectileMaterials[playerId % this.projectileMaterials.Length];
                 this.transform.GetComponent<Renderer>().material = material;
             }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.collider.CompareTag("SnowFlake")) {
+                var networkCommunication = FindObjectOfType<NetworkCommunication>();
+                networkCommunication.IncrementScore();
+                //Destroy(collision.gameObject);
+                PhotonNetwork.Destroy(collision.gameObject);
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 }

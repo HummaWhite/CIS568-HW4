@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 30883332838614829}
   m_Layer: 0
   m_Name: SnowFlake
-  m_TagString: Untagged
+  m_TagString: SnowFlake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -192,3 +192,4 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d07ab6afe3192844d9892ec571f9ef5a, type: 2}
   - {fileID: 2100000, guid: 893dba8f92a1e5b4f821ac96b7c2b845, type: 2}
   - {fileID: 2100000, guid: 6e1fd3ab57cbad24898e46e66380a0ec, type: 2}
+  playerNumber: 0
