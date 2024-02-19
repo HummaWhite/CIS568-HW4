@@ -32,12 +32,12 @@ namespace MyFirstARGame
         {
             if (collision.collider.CompareTag("SnowFlake") && PhotonNetwork.LocalPlayer.ActorNumber == playerNumber)
             {
-                /*var networkCommunication = FindObjectOfType<NetworkCommunication>();
+                var networkCommunication = FindObjectOfType<NetworkCommunication>();
                 networkCommunication.IncrementScore();
                 PhotonNetwork.Destroy(collision.gameObject);
                 Die();
             }
-            else if (collision.collider.CompareTag("Shield") && PhotonNetwork.LocalPlayer.ActorNumber == playerNumber) {*/
+            else if (collision.collider.CompareTag("Shield") && PhotonNetwork.LocalPlayer.ActorNumber == playerNumber) {
                 var networkCommunication = FindObjectOfType<NetworkCommunication>();
                 networkCommunication.IncrementShield();
                 this.transform.GetComponent<PhotonView>();
