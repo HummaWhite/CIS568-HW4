@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bullet
   - SnowFlake
+  - Shield
   layers:
   - Default
   - TransparentFX
