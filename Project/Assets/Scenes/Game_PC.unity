@@ -387,7 +387,7 @@ PrefabInstance:
         type: 3}
       propertyPath: snowballPrefab
       value: 
-      objectReference: {fileID: 7945317654531140131, guid: 571f0561c0d4d2f458f3be101ccdd9a8,
+      objectReference: {fileID: 9183901874634772596, guid: 133f41d7c73924e42a428ccaa1975ea6,
         type: 3}
     - target: {fileID: 3657056446851940632, guid: fd19030dcfdb6404ab2ad18af032906a,
         type: 3}

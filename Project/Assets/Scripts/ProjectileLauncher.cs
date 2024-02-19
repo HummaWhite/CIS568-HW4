@@ -41,7 +41,6 @@
             // It might make sense to have all game physics run on the server for a more complex scenario. You could transfer
             // ownership here to the server.
             var rigidbody = projectile.GetComponent<Rigidbody>();
-            rigidbody.isKinematic = false;
             rigidbody.velocity = ray.direction * initialSpeed;
 
             var networkCommunication = FindObjectOfType<NetworkCommunication>();

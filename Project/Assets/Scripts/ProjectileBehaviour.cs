@@ -11,7 +11,26 @@ namespace MyFirstARGame
         [SerializeField]
         private Material[] projectileMaterials;
 
+        public float deathTime = 10.0f;
         public int playerNumber = 0;
+        private float timer = 0;
+
+        void Start()
+        {
+            GetComponent<Renderer>().material.color = Color.white;
+        }
+
+        void FixedUpdate()
+        {
+            if (timer > deathTime)
+                Die();
+
+            var color = GetComponent<Renderer>().material.color;
+            color.a = Mathf.SmoothStep(1, 0, timer / deathTime);
+            GetComponent<Renderer>().material.color = color;
+
+            timer += Time.deltaTime;
+        }
 
         private void Awake()
         {
