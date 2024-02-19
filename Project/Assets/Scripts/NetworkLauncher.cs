@@ -94,6 +94,7 @@ namespace MyFirstARGame
             // Entering here means we are connected to a room.
             Debug.Log("Joined room");
             this.isJoinedToRoom = true;
+            GameManager.roomCreated = true;
 
             // First client spawns the network manager.
             if (PhotonNetwork.IsMasterClient)
