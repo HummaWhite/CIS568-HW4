@@ -22,6 +22,13 @@ namespace MyFirstARGame
 
         }
 
+        public void IncrementShield()
+        {
+            var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            var currentShield = this.scoreboard.GetShield(player);
+            this.photonView.RPC("Network_SetPlayerShield", RpcTarget.All, player, currentShield + 1);
+        }
+
         public void IncrementScore()
         {
             var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
@@ -34,6 +41,13 @@ namespace MyFirstARGame
         {
             Debug.Log($"Player {player} scored!");
             this.scoreboard.SetScore(player, newScore);
+        }
+
+        [PunRPC]
+        public void Network_SetPlayerShield(string player, int newScore)
+        {
+            Debug.Log($"Player {player} shield!");
+            this.scoreboard.SetShield(player, newScore);
         }
 
         public void UpdateForNewPlayer(Photon.Realtime.Player player)
