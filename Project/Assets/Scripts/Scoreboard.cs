@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace MyFirstARGame
 {
     public class Scoreboard : MonoBehaviour
     {
         private Dictionary<string, int> scores;
+        private Dictionary<string, int> shieldList;
         // Start is called before the first frame update
         void Start()
         {
             this.scores = new Dictionary<string, int>();
+            this.shieldList = new Dictionary<string, int>();
         }
 
         public int GetScore(string player)
@@ -25,6 +29,18 @@ namespace MyFirstARGame
             else
                 this.scores.Add(player, score);
         }
+        public int GetShield(string player) 
+        {
+            return this.shieldList.ContainsKey(player) ? this.shieldList[player] : 0;
+        }
+
+        public void SetShield(string player, int score)
+        {
+            if (this.shieldList.ContainsKey(player))
+                this.shieldList[player] = score;
+            else
+                this.shieldList.Add(player, score);
+        }
 
         void OnGUI()
         {
@@ -32,6 +48,11 @@ namespace MyFirstARGame
             GUILayout.BeginVertical();
             GUILayout.FlexibleSpace();
 
+            //display number of shield
+            var name = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            var currentShield = this.GetShield(name);
+
+            GUILayout.Label($"Your Shield : {currentShield}", new GUIStyle { normal = new GUIStyleState { textColor = Color.black }, fontSize = 120 });
             foreach (var score in this.scores)
                 GUILayout.Label($"{score.Key}: {score.Value}", new GUIStyle { normal = new GUIStyleState { textColor = Color.black }, fontSize = 120 });
 
