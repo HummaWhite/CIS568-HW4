@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5786375879518019165}
   - component: {fileID: -4925813923803679778}
   - component: {fileID: -7166882883348775237}
-  - component: {fileID: 30883332838614829}
   - component: {fileID: -7331914178531164775}
   - component: {fileID: 8182959204871699131}
   m_Layer: 0
@@ -177,25 +176,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &30883332838614829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9183901874634772596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efc03f4f6e9a1774db9a5176a1b08228, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectileMaterials:
-  - {fileID: 2100000, guid: e7360144d7f619248821fe47d8acb152, type: 2}
-  - {fileID: 2100000, guid: d07ab6afe3192844d9892ec571f9ef5a, type: 2}
-  - {fileID: 2100000, guid: 893dba8f92a1e5b4f821ac96b7c2b845, type: 2}
-  - {fileID: 2100000, guid: 6e1fd3ab57cbad24898e46e66380a0ec, type: 2}
-  deathTime: 10
-  playerNumber: 0
 --- !u!75 &-7331914178531164775
 ConstantForce:
   m_ObjectHideFlags: 0

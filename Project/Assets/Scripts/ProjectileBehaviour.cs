@@ -25,8 +25,11 @@ namespace MyFirstARGame
         {
             if (timer > deathTime)
             {
-                int viewID = gameObject.GetComponent<PhotonView>().ViewID;
-                this.transform.GetComponent<PhotonView>().RPC("On_Destroy", RpcTarget.MasterClient, viewID);
+                if (GetComponent<PhotonView>().IsMine)
+                {
+                    PhotonNetwork.Destroy(gameObject);
+                }
+                return;
             }
 
             var color = GetComponent<Renderer>().material.color;
@@ -57,15 +60,32 @@ namespace MyFirstARGame
             {
                 var networkCommunication = FindObjectOfType<NetworkCommunication>();
                 networkCommunication.IncrementScore();
-                int viewID = collision.collider.GetComponent<PhotonView>().ViewID;
-                this.transform.GetComponent<PhotonView>().RPC("On_Destroy", RpcTarget.MasterClient, viewID);
+                //int viewID = collision.collider.GetComponent<PhotonView>().ViewID;
+                //this.transform.GetComponent<PhotonView>().RPC("On_Destroy", RpcTarget.MasterClient, viewID);
+                PhotonView photonView = collision.collider.GetComponent<PhotonView>();
+                if (photonView != null)
+                {
+                    if (photonView.ViewID != 0)
+                    {
+                        photonView.RPC("DestroySnowFlake", RpcTarget.All);
+                    }
+                }
+                //photonView.RPC("DestroyProjectile", RpcTarget.All);
                 Die();
             }
             else if (collision.collider.CompareTag("Shield") && PhotonNetwork.LocalPlayer.ActorNumber == playerNumber) {
                 var networkCommunication = FindObjectOfType<NetworkCommunication>();
                 networkCommunication.IncrementShield();
-                int viewID = collision.collider.GetComponent<PhotonView>().ViewID;
-                this.transform.GetComponent<PhotonView>().RPC("On_Destroy", RpcTarget.MasterClient, viewID);
+                //int viewid = collision.collider.getcomponent<photonview>().viewid;
+                //this.transform.getcomponent<photonview>().rpc("on_destroy", rpctarget.masterclient, viewid);
+                PhotonView photonView = collision.collider.GetComponent<PhotonView>();
+                if (photonView != null)
+                {
+                    if (photonView.ViewID != 0)
+                    {
+                        photonView.RPC("DestroyShield", RpcTarget.All);
+                    }
+                }
                 Die();
             }
         }
@@ -74,6 +94,15 @@ namespace MyFirstARGame
         void On_Destroy(int viewID)
         {
             if(PhotonView.Find(viewID) != null)PhotonNetwork.Destroy(PhotonView.Find(viewID).gameObject);
+        }
+
+        [PunRPC]
+        void DestroyProjectile()
+        {
+            if (GetComponent<PhotonView>().IsMine || PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
 
         void Die() {
