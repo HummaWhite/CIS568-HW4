@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreboard: {fileID: -3185902637669520225}
+  gameManager: {fileID: 3657056446851940632, guid: fd19030dcfdb6404ab2ad18af032906a,
+    type: 3}
 --- !u!114 &4608888377164664123
 MonoBehaviour:
   m_ObjectHideFlags: 0

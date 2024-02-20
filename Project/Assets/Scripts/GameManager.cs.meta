@@ -3,7 +3,15 @@ guid: bc985059383c748458d8e8e16d12223a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - snowballPrefab: {fileID: 919132149155446097, guid: 324710522cc3c38449632d3b8547d5d0,
+      type: 3}
+  - snowflakePrefab: {fileID: 9183901874634772596, guid: 2f69f2e5c14705640bfd3fd8a6e7558c,
+      type: 3}
+  - shieldPrefab: {fileID: 2818788175618448332, guid: f73128dea890bab49a866101f61d8e3f,
+      type: 3}
+  - groundPrefab: {fileID: 5343395091266789860, guid: 05825b95a9480ce40b1a0248eed876df,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -10,16 +10,19 @@ namespace MyFirstARGame
     {
         [SerializeField]
         private Scoreboard scoreboard;
+        [SerializeField]
+        private GameManager gameManager;
+        
         // Start is called before the first frame update
         void Start()
         {
-
+            gameManager.Start();
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            gameManager.Update();
         }
 
         public void IncrementShield()

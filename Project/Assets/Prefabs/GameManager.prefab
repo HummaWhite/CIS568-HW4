@@ -44,3 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc985059383c748458d8e8e16d12223a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  snowballPrefab: {fileID: 9183901874634772596, guid: 133f41d7c73924e42a428ccaa1975ea6,
+    type: 3}
+  snowflakePrefab: {fileID: 9183901874634772596, guid: 2f69f2e5c14705640bfd3fd8a6e7558c,
+    type: 3}
+  shieldPrefab: {fileID: 2818788175618448332, guid: f73128dea890bab49a866101f61d8e3f,
+    type: 3}
+  groundPrefab: {fileID: 5343395091266789860, guid: 05825b95a9480ce40b1a0248eed876df,
+    type: 3}
+  snowflakeSpawnTime: 0.5
+  shieldSpawnTime: 5
+  snowballSpawnTime: 1
+  snowflakeSpawnRange: {x: 5, y: 5, z: 5}
