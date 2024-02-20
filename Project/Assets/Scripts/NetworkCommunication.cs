@@ -13,6 +13,9 @@ namespace MyFirstARGame
         [SerializeField]
         private GameManager gameManager;
         
+
+        int numOfLives = 5;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -53,11 +56,21 @@ namespace MyFirstARGame
             this.scoreboard.SetShield(player, newScore);
         }
 
+        [PunRPC]
+        public void Network_SetPlayerLife(string player, int newScore)
+        {
+            Debug.Log($"Player {player} has life!");
+            this.scoreboard.SetShield(player, newScore);
+        }
+
         public void UpdateForNewPlayer(Photon.Realtime.Player player)
         {
             var name = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
             var currentScore = this.scoreboard.GetScore(name);
+            var currentShield = this.scoreboard.GetScore(name);
             this.photonView.RPC("Network_SetPlayerScore", player, name, currentScore + 1);
+            this.photonView.RPC("Network_SetPlayerShield", player, name, currentScore);
+            this.photonView.RPC("Network_SetPlayerLife", player, name, numOfLives);
         }
     }
 
