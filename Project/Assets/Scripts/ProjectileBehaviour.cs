@@ -2,6 +2,7 @@ namespace MyFirstARGame
 {
     using UnityEngine;
     using Photon.Pun;
+    using Photon.Realtime;
 
     /// <summary>
     /// Controls projectile behaviour. In our case it currently only changes the material of the projectile based on the player that owns it.
@@ -23,7 +24,10 @@ namespace MyFirstARGame
         void FixedUpdate()
         {
             if (timer > deathTime)
-                Die();
+            {
+                int viewID = gameObject.GetComponent<PhotonView>().ViewID;
+                this.transform.GetComponent<PhotonView>().RPC("On_Destroy", RpcTarget.MasterClient, viewID);
+            }
 
             var color = GetComponent<Renderer>().material.color;
             color.a = Mathf.SmoothStep(1, 0, timer / deathTime);
@@ -53,21 +57,29 @@ namespace MyFirstARGame
             {
                 var networkCommunication = FindObjectOfType<NetworkCommunication>();
                 networkCommunication.IncrementScore();
-                PhotonNetwork.Destroy(collision.gameObject);
+                int viewID = collision.collider.GetComponent<PhotonView>().ViewID;
+                this.transform.GetComponent<PhotonView>().RPC("On_Destroy", RpcTarget.MasterClient, viewID);
                 Die();
             }
             else if (collision.collider.CompareTag("Shield") && PhotonNetwork.LocalPlayer.ActorNumber == playerNumber) {
                 var networkCommunication = FindObjectOfType<NetworkCommunication>();
                 networkCommunication.IncrementShield();
-                this.transform.GetComponent<PhotonView>();
-                PhotonNetwork.Destroy(collision.gameObject);
+                int viewID = collision.collider.GetComponent<PhotonView>().ViewID;
+                this.transform.GetComponent<PhotonView>().RPC("On_Destroy", RpcTarget.MasterClient, viewID);
                 Die();
             }
         }
 
-        private void Die()
+        [PunRPC]
+        void On_Destroy(int viewID)
         {
+            if(PhotonView.Find(viewID) != null)PhotonNetwork.Destroy(PhotonView.Find(viewID).gameObject);
+        }
+
+        void Die() {
             PhotonNetwork.Destroy(gameObject);
         }
+
+        
     }
 }
