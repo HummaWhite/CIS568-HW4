@@ -43,8 +43,8 @@
             var rigidbody = projectile.GetComponent<Rigidbody>();
             rigidbody.velocity = ray.direction * initialSpeed;
 
-            var networkCommunication = FindObjectOfType<NetworkCommunication>();
-            networkCommunication.IncrementScore();
+            /*var networkCommunication = FindObjectOfType<NetworkCommunication>();
+            networkCommunication.IncrementScore();*/
         }
     }
 }

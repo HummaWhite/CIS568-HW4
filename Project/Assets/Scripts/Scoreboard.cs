@@ -10,11 +10,13 @@ namespace MyFirstARGame
     {
         private Dictionary<string, int> scores;
         private Dictionary<string, int> shieldList;
+        private Dictionary<string, int> liveList;
         // Start is called before the first frame update
         void Start()
         {
             this.scores = new Dictionary<string, int>();
             this.shieldList = new Dictionary<string, int>();
+            this.liveList = new Dictionary<string, int>();
         }
 
         public int GetScore(string player)
@@ -42,6 +44,19 @@ namespace MyFirstARGame
                 this.shieldList.Add(player, score);
         }
 
+        public int GetLife(string player)
+        {
+            return this.liveList.ContainsKey(player) ? this.liveList[player] : 0;
+        }
+
+        public void SetLife(string player, int score)
+        {
+            if (this.liveList.ContainsKey(player))
+                this.liveList[player] = score;
+            else
+                this.liveList.Add(player, score);
+        }
+
         void OnGUI()
         {
             GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
@@ -51,8 +66,10 @@ namespace MyFirstARGame
             //display number of shield
             var name = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
             var currentShield = this.GetShield(name);
+            var currentLife = this.GetLife(name);
 
             GUILayout.Label($"Your Shield : {currentShield}", new GUIStyle { normal = new GUIStyleState { textColor = Color.black }, fontSize = 120 });
+            GUILayout.Label($"Your Lives : {currentLife}", new GUIStyle { normal = new GUIStyleState { textColor = Color.black }, fontSize = 120 });
             foreach (var score in this.scores)
                 GUILayout.Label($"{score.Key}: {score.Value}", new GUIStyle { normal = new GUIStyleState { textColor = Color.black }, fontSize = 120 });
 
