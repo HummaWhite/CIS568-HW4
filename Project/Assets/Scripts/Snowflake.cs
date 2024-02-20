@@ -19,7 +19,10 @@ namespace MyFirstARGame
         {
             if (timer > DeathTime)
             {
-                PhotonNetwork.Destroy(gameObject);
+                if (GetComponent<PhotonView>().IsMine)
+                {
+                    PhotonNetwork.Destroy(gameObject);
+                }
                 return;
             }
 
@@ -28,6 +31,15 @@ namespace MyFirstARGame
             GetComponent<Renderer>().material.color = color;
 
             timer += Time.deltaTime;
+        }
+
+        [PunRPC]
+        public void DestroySnowFlake()
+        {
+            if (GetComponent<PhotonView>().IsMine)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
     }
 }

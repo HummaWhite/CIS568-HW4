@@ -26,6 +26,7 @@ namespace MyFirstARGame
         // Start is called before the first frame update
         public void Start()
         {
+            GeneratePublicObject();
         }
 
         // Update is called once per frame
@@ -34,7 +35,7 @@ namespace MyFirstARGame
             if (!roomCreated)
                 return;
 
-            GeneratePublicObject();
+            //GeneratePublicObject();
             SpawnSnowflake();
             SpawnShield();
             SpawnSnowball();
@@ -46,11 +47,11 @@ namespace MyFirstARGame
 
         void GeneratePublicObject()
         {
-            if (publicObjectGenerated)
-                return;
+            //if (publicObjectGenerated)
+            //    return;
 
             PhotonNetwork.Instantiate(groundPrefab.name, new Vector3(0, 0, 0), Quaternion.identity, data: null);
-            publicObjectGenerated = true;
+            //publicObjectGenerated = true;
         }
 
         void SpawnSnowflake()

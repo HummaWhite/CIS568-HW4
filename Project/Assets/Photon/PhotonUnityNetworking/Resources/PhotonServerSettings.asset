@@ -47,6 +47,10 @@ MonoBehaviour:
   - OnDestroy
   - On_Destroy
   - Die
+  - Network_SetPlayerLife
+  - DestroySnowFlake
+  - DestroyProjectile
+  - DestroyShield
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
