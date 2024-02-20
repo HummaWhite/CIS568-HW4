@@ -44,6 +44,9 @@ MonoBehaviour:
   - UpdateScale
   - Network_SetPlayerScore
   - Network_SetPlayerShield
+  - OnDestroy
+  - On_Destroy
+  - Die
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
