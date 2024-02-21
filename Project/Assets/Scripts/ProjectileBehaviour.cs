@@ -34,7 +34,7 @@ namespace MyFirstARGame
             {
                 if (GetComponent<PhotonView>().IsMine)
                 {
-                    PhotonNetwork.Destroy(gameObject);
+                    //PhotonNetwork.Destroy(gameObject);
                 }
                 return;
             }

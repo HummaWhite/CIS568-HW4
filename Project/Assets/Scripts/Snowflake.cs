@@ -7,8 +7,15 @@ namespace MyFirstARGame
 {
     public class Snowflake : MonoBehaviour
     {
+        public enum State
+        {
+            Falling, OnGround
+        }
+
         public float DeathTime = 10.0f;
         private float timer = 0;
+        public State state = State.Falling;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -26,11 +33,23 @@ namespace MyFirstARGame
                 return;
             }
 
-            var color = GetComponent<Renderer>().material.color;
-            color.a = Mathf.SmoothStep(1, 0, timer / DeathTime);
-            GetComponent<Renderer>().material.color = color;
+            if (state == State.OnGround)
+            {
+                var color = GetComponent<Renderer>().material.color;
+                //color.a = Mathf.SmoothStep(1, 0, timer / DeathTime);
+                color.a = Mathf.Lerp(1, 0, timer / DeathTime);
+                GetComponent<Renderer>().material.color = color;
 
-            timer += Time.deltaTime;
+                timer += Time.deltaTime;
+            }
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            if (collision.collider.CompareTag("Ground"))
+            {
+                state = State.OnGround;
+            }
         }
 
         [PunRPC]

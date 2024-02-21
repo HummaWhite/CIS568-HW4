@@ -21,12 +21,14 @@ namespace MyFirstARGame
         float snowflakeTimer = 0;
         float shieldTimer = 0;
         float snowballTimer = 0;
-        bool publicObjectGenerated = false;
+        public int maxSnowballCount = 20;
+        public int snowballCount = 0;
 
         // Start is called before the first frame update
         public void Start()
         {
             GeneratePublicObject();
+            snowballCount = 0;
         }
 
         // Update is called once per frame
@@ -47,11 +49,7 @@ namespace MyFirstARGame
 
         void GeneratePublicObject()
         {
-            //if (publicObjectGenerated)
-            //    return;
-
             PhotonNetwork.Instantiate(groundPrefab.name, new Vector3(0, 0, 0), Quaternion.identity, data: null);
-            //publicObjectGenerated = true;
         }
 
         void SpawnSnowflake()
@@ -84,7 +82,7 @@ namespace MyFirstARGame
 
         void SpawnSnowball()
         {
-            if (snowballTimer < snowballSpawnTime)
+            if (snowballCount >= maxSnowballCount)
                 return;
 
             var pos = new Vector3(Random.Range(-snowflakeSpawnRange.x, snowflakeSpawnRange.x), 0.5f, Random.Range(-snowflakeSpawnRange.z, snowflakeSpawnRange.z));
@@ -92,7 +90,7 @@ namespace MyFirstARGame
 
             var snowball = PhotonNetwork.Instantiate(snowballPrefab.name, pos, Quaternion.identity, data: initialData);
 
-            snowballTimer = 0;
+            snowballCount++;
         }
     }
 }

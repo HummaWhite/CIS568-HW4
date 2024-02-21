@@ -55,4 +55,6 @@ MonoBehaviour:
   snowflakeSpawnTime: 0.5
   shieldSpawnTime: 5
   snowballSpawnTime: 1
-  snowflakeSpawnRange: {x: 5, y: 5, z: 5}
+  snowflakeSpawnRange: {x: 5, y: 10, z: 5}
+  maxSnowballCount: 20
+  snowballCount: 20
