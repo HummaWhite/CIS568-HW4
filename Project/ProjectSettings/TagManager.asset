@@ -8,6 +8,8 @@ TagManager:
   - SnowFlake
   - Shield
   - Snowball
+  - Ground
+  - PlayerBox
   layers:
   - Default
   - TransparentFX

@@ -42,6 +42,11 @@ namespace MyFirstARGame
             this.photonView.RPC("Network_SetPlayerScore", RpcTarget.All, player, currentScore + 1);
         }
 
+        public void DecrementSnowball()
+        {
+            gameManager.snowballCount--;
+        }
+
         [PunRPC]
         public void Network_SetPlayerScore(string player, int newScore)
         {
