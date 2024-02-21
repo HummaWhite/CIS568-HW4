@@ -7,6 +7,7 @@ TagManager:
   - Bullet
   - SnowFlake
   - Shield
+  - Snowball
   layers:
   - Default
   - TransparentFX
