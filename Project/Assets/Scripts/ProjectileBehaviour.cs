@@ -3,18 +3,25 @@ namespace MyFirstARGame
     using UnityEngine;
     using Photon.Pun;
     using Photon.Realtime;
+    using ExitGames.Client.Photon.StructWrapping;
 
     /// <summary>
     /// Controls projectile behaviour. In our case it currently only changes the material of the projectile based on the player that owns it.
     /// </summary>
     public class ProjectileBehaviour : MonoBehaviour
     {
+        public enum State
+        {
+            OnGround, PickedUp, Attack
+        }
+
         [SerializeField]
         private Material[] projectileMaterials;
 
         public float deathTime = 10.0f;
         public int playerNumber = 0;
         private float timer = 0;
+        public State state = State.OnGround;
 
         void Start()
         {
@@ -36,7 +43,10 @@ namespace MyFirstARGame
             color.a = Mathf.SmoothStep(1, 0, timer / deathTime);
             GetComponent<Renderer>().material.color = color;
 
-            timer += Time.deltaTime;
+            if (state != State.PickedUp)
+            {
+                timer += Time.deltaTime;
+            }
         }
 
         private void Awake()
@@ -56,6 +66,11 @@ namespace MyFirstARGame
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (state == State.OnGround)
+            {
+                return;
+            }
+
             if (collision.collider.CompareTag("SnowFlake") && PhotonNetwork.LocalPlayer.ActorNumber == playerNumber)
             {
                 var networkCommunication = FindObjectOfType<NetworkCommunication>();

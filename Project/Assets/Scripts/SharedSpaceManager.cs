@@ -33,6 +33,7 @@ namespace MyFirstARGame
         private bool hasFoundOrigin;
 
         private GameObject arCamera;
+        private GameObject playerBox;
         private bool syncNextTick;
 
         private void Awake()
@@ -64,6 +65,9 @@ namespace MyFirstARGame
         {
             var mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             this.arCamera = PhotonNetwork.Instantiate("ARCamera", mainCamera.transform.position, mainCamera.transform.rotation);
+
+            var initialData = new object[] { PhotonNetwork.LocalPlayer.ActorNumber };
+            this.playerBox = PhotonNetwork.Instantiate("PlayerBox", Vector3.zero, Quaternion.identity, data: initialData);
         }
 
         private void ArTrackedImageManager_trackedImagesChanged(ARTrackedImagesChangedEventArgs args)
@@ -168,11 +172,18 @@ namespace MyFirstARGame
 
         private void Update()
         {
+            var mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            var position = mainCamera.transform.position;
+            var rotation = mainCamera.transform.rotation;
             // Update our camera position every frame.
             if (this.arCamera != null)
             {
-                var mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-                this.arCamera.transform.SetPositionAndRotation(mainCamera.transform.position, mainCamera.transform.rotation);
+                this.arCamera.transform.SetPositionAndRotation(position, rotation);
+            }
+
+            if (this.playerBox != null)
+            {
+                this.playerBox.transform.SetPositionAndRotation(position, rotation);
             }
         }
 
