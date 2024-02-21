@@ -89,10 +89,6 @@ namespace MyFirstARGame
                 Die();
             }
             else if (collision.collider.CompareTag("Shield") && PhotonNetwork.LocalPlayer.ActorNumber == playerNumber) {
-                var networkCommunication = FindObjectOfType<NetworkCommunication>();
-                networkCommunication.IncrementShield();
-                //int viewid = collision.collider.getcomponent<photonview>().viewid;
-                //this.transform.getcomponent<photonview>().rpc("on_destroy", rpctarget.masterclient, viewid);
                 PhotonView photonView = collision.collider.GetComponent<PhotonView>();
                 if (photonView != null)
                 {

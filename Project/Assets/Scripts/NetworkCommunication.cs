@@ -19,6 +19,7 @@ namespace MyFirstARGame
         // Start is called before the first frame update
         void Start()
         {
+            scoreboard.Start();
             gameManager.Start();
         }
 
@@ -26,14 +27,21 @@ namespace MyFirstARGame
         void Update()
         {
             gameManager.Update();
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (this.scoreboard.GetScore($"Player {player.ActorNumber}") < 0)
+                {
+                    this.photonView.RPC("Network_SetPlayerLife", RpcTarget.All, $"Player {player.ActorNumber}", this.numOfLives);
+                    this.photonView.RPC("Network_SetPlayerScore", RpcTarget.All, $"Player {player.ActorNumber}", 0);
+                }
+            }
+            if(scoreboard.isGameOver())
+            {
+                int winner = scoreboard.GetWinner();
+                this.photonView.RPC("Network_SetGameOver", RpcTarget.All, true, winner);
+            }
         }
 
-        public void IncrementShield()
-        {
-            var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
-            var currentShield = this.scoreboard.GetShield(player);
-            this.photonView.RPC("Network_SetPlayerShield", RpcTarget.All, player, currentShield + 1);
-        }
 
         public void IncrementScore()
         {
@@ -54,27 +62,26 @@ namespace MyFirstARGame
             this.scoreboard.SetScore(player, newScore);
         }
 
-        [PunRPC]
-        public void Network_SetPlayerShield(string player, int newScore)
-        {
-            Debug.Log($"Player {player} shield!");
-            this.scoreboard.SetShield(player, newScore);
-        }
 
         [PunRPC]
         public void Network_SetPlayerLife(string player, int newScore)
         {
-            Debug.Log($"Player {player} has life!");
-            this.scoreboard.SetShield(player, newScore);
+            this.scoreboard.SetLife(player, newScore);
         }
 
+        [PunRPC]
+        public void Network_SetGameOver(bool isGameOver, int winner)
+        {
+            Debug.Log($"Game Over!");
+            this.scoreboard.setGameOver();
+            this.scoreboard.SetWinner(winner);
+        }
+        
         public void UpdateForNewPlayer(Photon.Realtime.Player player)
         {
             var name = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
             var currentScore = this.scoreboard.GetScore(name);
-            var currentShield = this.scoreboard.GetScore(name);
             this.photonView.RPC("Network_SetPlayerScore", player, name, currentScore + 1);
-            this.photonView.RPC("Network_SetPlayerShield", player, name, currentScore);
             this.photonView.RPC("Network_SetPlayerLife", player, name, numOfLives);
         }
     }

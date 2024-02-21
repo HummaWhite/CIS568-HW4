@@ -22,7 +22,8 @@ namespace MyFirstARGame
         private void Awake()
         {
             var photonView = this.transform.GetComponent<PhotonView>();
-            playerID = Mathf.Max((int)photonView.InstantiationData[0], 0);
+            // photon player id
+            playerID = PhotonNetwork.LocalPlayer.ActorNumber;
         
             if (this.materials.Length > 0)
             {
@@ -89,6 +90,10 @@ namespace MyFirstARGame
 
         public void TakeDamage()
         {
+            var networkCommunication = FindObjectOfType<NetworkCommunication>();
+            var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            var currentLife = networkCommunication.GetComponent<Scoreboard>().GetLife(player);
+            networkCommunication.GetComponent<PhotonView>().RPC("Network_SetPlayerLife", RpcTarget.All, player, currentLife - 1);
         }
 
         void OnCollisionEnter(Collision collision)
