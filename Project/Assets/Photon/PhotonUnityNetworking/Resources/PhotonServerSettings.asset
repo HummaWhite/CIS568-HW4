@@ -52,6 +52,13 @@ MonoBehaviour:
   - DestroyProjectile
   - DestroyShield
   - Network_SetGameOver
+  - updateSnowBall
+  - UpdateShield
+  - UpdateSnowBall
+  - ShootSnowBallRPC
+  - Network_SetHasSnowBall
+  - Network_SetHasShield
+  - Network_SetHasShieldl
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

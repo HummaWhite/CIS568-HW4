@@ -27,12 +27,29 @@
             if (uiButtons != null && (uiButtons.IsPointOverUI(position) || !uiButtons.IsIdle))
                 return;
 
-            // Cast a ray from the touch point to the world. We use the camera position as the origin and the ray direction as the
-            // velocity direction.
-            var ray = this.GetComponent<Camera>().ScreenPointToRay(position);
+            var initialData = new object[] { PhotonNetwork.LocalPlayer.ActorNumber };
 
-            var player = FindObjectOfType<PlayerBox>();
-            player.ShootSnowball(ray.direction, initialSpeed);
+            var networkCommunication = FindObjectOfType<NetworkCommunication>();
+            bool hasSnowBall = networkCommunication.getHasSnowBall();
+
+            if (hasSnowBall) {
+                var ray = this.GetComponent<Camera>().ScreenPointToRay(position);
+                //var player = FindObjectOfType<PlayerBox>();
+                //player.ShootSnowball(ray.direction, initialSpeed);
+                
+
+                var projectile = PhotonNetwork.Instantiate(this.projectilePrefab.name, ray.origin + ray.direction * 1.0f, Quaternion.identity, data: initialData);
+                var rigidbody = projectile.GetComponent<Rigidbody>();
+                projectile.GetComponent<ProjectileBehaviour>().state = ProjectileBehaviour.State.Attack;
+                rigidbody.velocity = ray.direction * initialSpeed;
+
+                networkCommunication.SetHasSnowBall(false);
+            }
+            
+
+            
+
+            //FindObjectsBytag
             /*var networkCommunication = FindObjectOfType<NetworkCommunication>();
             networkCommunication.IncrementScore();*/
         }

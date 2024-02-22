@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon.StructWrapping;
+using UnityEngine.UIElements;
 
 namespace MyFirstARGame
 {
@@ -13,6 +14,7 @@ namespace MyFirstARGame
         public int playerID;
         public GameObject snowball;
         public GameObject shield;
+        public bool hasSnowBall = false;
         // Start is called before the first frame update
         void Start()
         {
@@ -47,51 +49,78 @@ namespace MyFirstARGame
         {
             if (snowball != null)
             {
-                snowball.transform.SetPositionAndRotation(GetSnowballHoldingPosition(), transform.rotation);
-                snowball.GetComponent<ProjectileBehaviour>().state = ProjectileBehaviour.State.PickedUp;
+                Vector3 pos = GetSnowballHoldingPosition();
+                PhotonView photonView = this.GetComponent<PhotonView>();
+                photonView.RPC("UpdateSnowBall", photonView.Controller, pos);
+                //snowball.transform.SetPositionAndRotation(GetSnowballHoldingPosition(), transform.rotation);
+                //snowball.GetComponent<ProjectileBehaviour>().state = ProjectileBehaviour.State.PickedUp;
             }
 
             if (shield != null)
             {
-                var rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
-                shield.transform.SetPositionAndRotation(GetShieldHoldingPosition(), transform.rotation * rotation);
-                shield.GetComponent<Shield>().state = Shield.State.PickedUp;
+                Vector3 pos = GetShieldHoldingPosition();
+                PhotonView photonView = this.GetComponent<PhotonView>();
+                photonView.RPC("UpdateShield", RpcTarget.All, pos, transform.rotation);
+                //var rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+                //shield.transform.SetPositionAndRotation(GetShieldHoldingPosition(), transform.rotation * rotation);
+                //shield.GetComponent<Shield>().state = Shield.State.PickedUp;
             }
         }
 
         public void TakeSnowball()
         {
-            var initialData = new object[] { PhotonNetwork.LocalPlayer.ActorNumber };
-            snowball = PhotonNetwork.Instantiate("Projectile", GetSnowballHoldingPosition(), transform.rotation, data: initialData);
-            var rigidbody = snowball.GetComponent<Rigidbody>();
-            rigidbody.useGravity = false;
+            hasSnowBall = true;
+            //var initialData = new object[] { PhotonNetwork.LocalPlayer.ActorNumber };
+            //snowball = PhotonNetwork.Instantiate("Projectile", GetSnowballHoldingPosition(), transform.rotation, data: initialData);
+            //var rigidbody = snowball.GetComponent<Rigidbody>();
+            //rigidbody.useGravity = false;
 
-            FindObjectOfType<NetworkCommunication>().GetComponent<NetworkCommunication>().DecrementSnowball();
+            //FindObjectOfType<NetworkCommunication>().GetComponent<NetworkCommunication>().DecrementSnowball();
+
+            var networkCommunication = FindObjectOfType<NetworkCommunication>();
+            networkCommunication.SetHasSnowBall(true);
         }
 
         public void TakeShield(GameObject shield)
         {
-            this.shield = shield;
+            //this.shield = shield;
+            shield.GetComponent<PhotonView>().RPC("DestroyShield", RpcTarget.All);
+            var networkCommunication = FindObjectOfType<NetworkCommunication>();
+            networkCommunication.SetHasShield(true);
+            //this.shield.GetComponent<Shield>().state = Shield.State.PickedUp;
         }
 
         public void ShootSnowball(Vector3 direction, float initialSpeed)
         {
-            if (snowball == null) return;
+            var networkCommunication = FindObjectOfType<NetworkCommunication>();
+            bool hasBall = networkCommunication.getHasSnowBall();
+            if (!hasBall) return;
 
-            direction = transform.forward;
+            PhotonView photonView = snowball.GetComponent<PhotonView>();
+            photonView.RPC("DestroyProjectile", photonView.Controller);
+            var initialData = new object[] { PhotonNetwork.LocalPlayer.ActorNumber };
 
-            snowball.GetComponent<ProjectileBehaviour>().state = ProjectileBehaviour.State.Attack;
-            var rigidbody = snowball.GetComponent<Rigidbody>();
-            rigidbody.velocity = direction * initialSpeed;
-            rigidbody.useGravity = true;
+            // Cast a ray from the touch point to the world. We use the camera position as the origin and the ray direction as the
+            // velocity direction.
 
+            //var projectile = PhotonNetwork.Instantiate("Projectile", GetSnowballHoldingPosition(), Quaternion.identity, data: initialData);
+            //var rigidbody = projectile.GetComponent<Rigidbody>();
+            //rigidbody.velocity = direction * initialSpeed;
+
+            hasSnowBall = false;
             snowball = null;
         }
 
-        public void TakeDamage()
+        public void TakeDamage(int id)
         {
             var networkCommunication = FindObjectOfType<NetworkCommunication>();
-            var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            var player = $"Player {id}";
+            bool shieldNum = networkCommunication.GetComponent<Scoreboard>().GetHasShield(player);
+            if (shieldNum)
+            {
+                networkCommunication.GetComponent<PhotonView>().RPC("Network_SetHasShield", RpcTarget.All, player, false);
+                return;
+            }
             var currentLife = networkCommunication.GetComponent<Scoreboard>().GetLife(player);
             networkCommunication.GetComponent<PhotonView>().RPC("Network_SetPlayerLife", RpcTarget.All, player, currentLife - 1);
         }
@@ -110,7 +139,7 @@ namespace MyFirstARGame
                 }
                 else if (ball.state == ProjectileBehaviour.State.Attack)
                 {
-                    TakeDamage();
+                    TakeDamage(GetComponent<PhotonView>().Owner.ActorNumber);
                     photonView.RPC("DestroyProjectile", RpcTarget.All);
                 }
             }
@@ -124,6 +153,37 @@ namespace MyFirstARGame
                     TakeShield(collision.collider.gameObject);
                 }
             }
+        }
+
+        [PunRPC]
+        public void UpdateSnowBall(Vector3 pos) {
+            if (GetComponent<PhotonView>().IsMine)
+            {
+                snowball.transform.position = pos;
+                snowball.GetComponent<ProjectileBehaviour>().state = ProjectileBehaviour.State.PickedUp;
+            }
+        }
+
+        [PunRPC]
+        public void UpdateShield(Vector3 pos, Quaternion playerRotation)
+        {
+            if (GetComponent<PhotonView>().IsMine) {
+                var rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+                shield.transform.SetPositionAndRotation(pos, playerRotation * rotation);
+                shield.GetComponent<ProjectileBehaviour>().state = ProjectileBehaviour.State.PickedUp;
+            }
+            
+        }
+
+        [PunRPC]
+        public void ShootSnowBallRPC(Vector3 direction, float initialSpeed, Vector3 forward)
+        {
+            direction = forward;
+
+            snowball.GetComponent<ProjectileBehaviour>().state = ProjectileBehaviour.State.Attack;
+            var rigidbody = snowball.GetComponent<Rigidbody>();
+            rigidbody.velocity = direction * initialSpeed;
+            rigidbody.useGravity = true;
         }
     }
 }

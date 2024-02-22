@@ -33,7 +33,7 @@ namespace MyFirstARGame
                 return;
             }
 
-            if (state == State.OnGround)
+            if (state != State.PickedUp)
             {
                 var color = GetComponent<Renderer>().material.color;
                 color.a = Mathf.Lerp(1, 0, timer / DeathTime);
