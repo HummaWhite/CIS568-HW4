@@ -34,7 +34,7 @@ namespace MyFirstARGame
             {
                 if (GetComponent<PhotonView>().IsMine)
                 {
-                    //PhotonNetwork.Destroy(gameObject);
+                    PhotonNetwork.Destroy(gameObject);
                 }
                 return;
             }
@@ -108,9 +108,9 @@ namespace MyFirstARGame
         }
 
         [PunRPC]
-        void DestroyProjectile()
+        public void DestroyProjectile()
         {
-            if (GetComponent<PhotonView>().IsMine || PhotonNetwork.IsMasterClient)
+            if (GetComponent<PhotonView>().IsMine)
             {
                 PhotonNetwork.Destroy(gameObject);
             }

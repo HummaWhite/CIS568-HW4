@@ -27,16 +27,18 @@ namespace MyFirstARGame
         // Start is called before the first frame update
         public void Start()
         {
-            GeneratePublicObject();
-            snowballCount = 0;
+            if (PhotonNetwork.LocalPlayer.IsMasterClient) {
+                GeneratePublicObject();
+            }
         }
 
         // Update is called once per frame
         public void Update()
         {
-            if (!roomCreated)
+            if (!PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
                 return;
-
+            }
             //GeneratePublicObject();
             SpawnSnowflake();
             SpawnShield();
@@ -82,15 +84,14 @@ namespace MyFirstARGame
 
         void SpawnSnowball()
         {
-            if (snowballCount >= maxSnowballCount)
-                return;
+            if (snowballTimer < snowballSpawnTime) return;
 
             var pos = new Vector3(Random.Range(-snowflakeSpawnRange.x, snowflakeSpawnRange.x), 0.5f, Random.Range(-snowflakeSpawnRange.z, snowflakeSpawnRange.z));
             var initialData = new object[] { PhotonNetwork.LocalPlayer.ActorNumber };
 
             var snowball = PhotonNetwork.Instantiate(snowballPrefab.name, pos, Quaternion.identity, data: initialData);
 
-            snowballCount++;
+            snowballTimer = 0;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace MyFirstARGame
         private GameManager gameManager;
         
 
-        int numOfLives = 5;
+        int numOfLives = 1;
 
         // Start is called before the first frame update
         void Start()
@@ -50,6 +50,23 @@ namespace MyFirstARGame
             this.photonView.RPC("Network_SetPlayerScore", RpcTarget.All, player, currentScore + 1);
         }
 
+        public void SetHasSnowBall(bool hasBall)
+        {
+            var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            this.photonView.RPC("Network_SetHasSnowBall", RpcTarget.All, player, hasBall);
+        }
+
+        public void SetHasShield(bool hasShield)
+        {
+            var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            this.photonView.RPC("Network_SetHasShieldl", RpcTarget.All, player, hasShield);
+        }
+
+        public bool getHasSnowBall() {
+            var player = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            return this.scoreboard.GetHasSnowBall(player);
+        }
+
         public void DecrementSnowball()
         {
             gameManager.snowballCount--;
@@ -70,6 +87,25 @@ namespace MyFirstARGame
         }
 
         [PunRPC]
+        public void Network_SetHasSnowBall(string player, bool hasBall)
+        {
+            this.scoreboard.SetHasSnowBall(player, hasBall);
+        }
+
+        [PunRPC]
+        public void Network_SetHasShieldl(string player, bool hasShield)
+        {
+            this.scoreboard.SetHasShield(player, hasShield);
+        }
+
+        [PunRPC]
+        public void Network_SetHasShield(string player, bool hasShield)
+        {
+            Debug.Log($"Player {player} scored!");
+            this.scoreboard.SetHasShield(player, hasShield);
+        }
+
+        [PunRPC]
         public void Network_SetGameOver(bool isGameOver, int winner)
         {
             Debug.Log($"Game Over!");
@@ -83,6 +119,8 @@ namespace MyFirstARGame
             var currentScore = this.scoreboard.GetScore(name);
             this.photonView.RPC("Network_SetPlayerScore", player, name, currentScore + 1);
             this.photonView.RPC("Network_SetPlayerLife", player, name, numOfLives);
+            this.photonView.RPC("Network_SetHasSnowBall", player, name, true);
+            this.photonView.RPC("Network_SetHasShield", player, name, true);
         }
     }
 

@@ -53,8 +53,8 @@ MonoBehaviour:
   groundPrefab: {fileID: 5343395091266789860, guid: 05825b95a9480ce40b1a0248eed876df,
     type: 3}
   snowflakeSpawnTime: 0.5
-  shieldSpawnTime: 5
+  shieldSpawnTime: 1
   snowballSpawnTime: 1
   snowflakeSpawnRange: {x: 5, y: 10, z: 5}
   maxSnowballCount: 20
-  snowballCount: 20
+  snowballCount: 18
